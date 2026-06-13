@@ -9,10 +9,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/profiles")
@@ -30,6 +29,19 @@ public class ProfileController {
     @GetMapping("/me")
     public ResponseEntity<ProfileResponse> getMyProfile() {
         return ResponseEntity.ok(profileService.getMe());
+    }
+
+    @Operation(
+            summary = "Get profiles to swipe",
+            description = "Returns a batch of candidate profiles for the swipe deck, excluding the current user. "
+                    + "Profiles are returned in random order."
+    )
+    @ApiResponse(responseCode = "200", description = "Batch of candidate profiles")
+    @GetMapping("/discover")
+    public ResponseEntity<List<ProfileResponse>> discoverProfiles(
+            @Parameter(description = "Maximum number of profiles to return", example = "10")
+            @RequestParam(defaultValue = "10") int limit) {
+        return ResponseEntity.ok(profileService.getDiscoveryFeed(limit));
     }
 
     @Operation(

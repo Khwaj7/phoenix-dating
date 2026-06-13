@@ -5,9 +5,7 @@ import com.phoenix.dating.profile.model.Gender;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProfileService {
@@ -44,6 +42,46 @@ public class ProfileService {
                     "Bordeaux",
                     "France",
                     List.of("https://randomuser.me/api/portraits/women/3.jpg")
+            ),
+            "550e8400-e29b-41d4-a716-446655440003", new ProfileResponse(
+                    "550e8400-e29b-41d4-a716-446655440003",
+                    "David",
+                    "Cinéphile et cuisinier amateur",
+                    LocalDate.of(1991, 11, 30),
+                    Gender.MALE,
+                    "Lille",
+                    "France",
+                    List.of("https://randomuser.me/api/portraits/men/4.jpg")
+            ),
+            "550e8400-e29b-41d4-a716-446655440004", new ProfileResponse(
+                    "550e8400-e29b-41d4-a716-446655440004",
+                    "Emma",
+                    "Toujours partante pour un concert",
+                    LocalDate.of(1996, 6, 18),
+                    Gender.FEMALE,
+                    "Marseille",
+                    "France",
+                    List.of("https://randomuser.me/api/portraits/women/5.jpg")
+            ),
+            "550e8400-e29b-41d4-a716-446655440005", new ProfileResponse(
+                    "550e8400-e29b-41d4-a716-446655440005",
+                    "Farid",
+                    "Grimpeur, lecteur de SF et fan de jeux de société",
+                    LocalDate.of(1994, 2, 9),
+                    Gender.MALE,
+                    "Toulouse",
+                    "France",
+                    List.of("https://randomuser.me/api/portraits/men/6.jpg")
+            ),
+            "550e8400-e29b-41d4-a716-446655440006", new ProfileResponse(
+                    "550e8400-e29b-41d4-a716-446655440006",
+                    "Garance",
+                    "Photographe en quête de lumière",
+                    LocalDate.of(1997, 9, 27),
+                    Gender.FEMALE,
+                    "Nantes",
+                    "France",
+                    List.of("https://randomuser.me/api/portraits/women/7.jpg")
             )
     );
 
@@ -53,5 +91,14 @@ public class ProfileService {
 
     public Optional<ProfileResponse> getById(String userId) {
         return Optional.ofNullable(MOCK_PROFILES.get(userId));
+    }
+
+    public List<ProfileResponse> getDiscoveryFeed(int limit) {
+        List<ProfileResponse> candidates = new ArrayList<>(MOCK_PROFILES.values());
+        candidates.removeIf(profile -> MOCK_ME_ID.equals(profile.id()));
+        Collections.shuffle(candidates);
+        return candidates.stream()
+                .limit(Math.max(limit, 0))
+                .toList();
     }
 }
