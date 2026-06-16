@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/profiles")
@@ -28,7 +29,9 @@ public class ProfileController {
     @ApiResponse(responseCode = "200", description = "Profile of the current user")
     @GetMapping("/me")
     public ResponseEntity<ProfileResponse> getMyProfile() {
-        return ResponseEntity.ok(profileService.getMe());
+        UUID currentUserId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+
+        return ResponseEntity.ok(profileService.getMe(currentUserId));
     }
 
     @Operation(
@@ -41,6 +44,8 @@ public class ProfileController {
     public ResponseEntity<List<ProfileResponse>> discoverProfiles(
             @Parameter(description = "Maximum number of profiles to return", example = "10")
             @RequestParam(defaultValue = "10") int limit) {
+        UUID currentUserId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+
         return ResponseEntity.ok(profileService.getDiscoveryFeed(limit));
     }
 
@@ -53,11 +58,9 @@ public class ProfileController {
             @ApiResponse(responseCode = "404", description = "No profile for this identifier", content = @Content)
     })
     @GetMapping("/{userId}")
-    public ResponseEntity<ProfileResponse> getProfileById(
+    public ProfileResponse getProfileById(
             @Parameter(description = "User identifier (UUID)", example = "550e8400-e29b-41d4-a716-446655440001")
-            @PathVariable String userId) {
-        return profileService.getById(userId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+            @PathVariable UUID userId) {
+        return profileService.getById(userId);
     }
 }
