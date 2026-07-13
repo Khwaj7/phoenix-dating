@@ -27,11 +27,11 @@ public class Match {
     @Column(updatable = false, nullable = false)
     private UUID id;
 
-    @Column(name = "user1_id", nullable = false, updatable = false)
-    private UUID user1Id;
+    @Column(name = "matcher", nullable = false, updatable = false)
+    private UUID matcher;
 
-    @Column(name = "user2_id", nullable = false, updatable = false)
-    private UUID user2Id;
+    @Column(name = "matched", nullable = false, updatable = false)
+    private UUID matched;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
