@@ -31,9 +31,7 @@ public class ProfileService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    public List<ProfileResponse> getDiscoveryFeed(int limit) {
-        UUID currentUserId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
-
+    public List<ProfileResponse> getDiscoveryFeed(UUID currentUserId, int limit) {
         List<UserEntity> candidates = userRepository.findRandomExcluding(currentUserId, PageRequest.of(0, Math.max(limit, 0)));
 
         return candidates.stream()

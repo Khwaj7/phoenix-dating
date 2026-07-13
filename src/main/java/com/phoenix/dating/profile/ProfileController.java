@@ -29,7 +29,7 @@ public class ProfileController {
     @ApiResponse(responseCode = "200", description = "Profile of the current user")
     @GetMapping("/me")
     public ResponseEntity<ProfileResponse> getMyProfile() {
-        UUID currentUserId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+        UUID currentUserId = UUID.fromString("2cc245ed-78c6-4aa7-95f1-87e05387f0e7");
 
         return ResponseEntity.ok(profileService.getMe(currentUserId));
     }
@@ -46,7 +46,7 @@ public class ProfileController {
             @RequestParam(defaultValue = "10") int limit) {
         UUID currentUserId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
 
-        return ResponseEntity.ok(profileService.getDiscoveryFeed(limit));
+        return ResponseEntity.ok(profileService.getDiscoveryFeed(currentUserId, limit));
     }
 
     @Operation(
