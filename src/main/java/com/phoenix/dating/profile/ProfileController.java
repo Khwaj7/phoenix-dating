@@ -1,6 +1,8 @@
 package com.phoenix.dating.profile;
 
 import com.phoenix.dating.profile.dto.ProfileResponse;
+import com.phoenix.dating.security.CurrentUser;
+import com.phoenix.dating.user.UserEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,10 +30,8 @@ public class ProfileController {
     )
     @ApiResponse(responseCode = "200", description = "Profile of the current user")
     @GetMapping("/me")
-    public ResponseEntity<ProfileResponse> getMyProfile() {
-        UUID currentUserId = UUID.fromString("2cc245ed-78c6-4aa7-95f1-87e05387f0e7");
-
-        return ResponseEntity.ok(profileService.getMe(currentUserId));
+    public ResponseEntity<ProfileResponse> getMyProfile(@CurrentUser UserEntity currentUser) {
+        return ResponseEntity.ok(profileService.getMe(currentUser.getId()));
     }
 
     @Operation(
@@ -42,11 +42,10 @@ public class ProfileController {
     @ApiResponse(responseCode = "200", description = "Batch of candidate profiles")
     @GetMapping("/discover")
     public ResponseEntity<List<ProfileResponse>> discoverProfiles(
+            @CurrentUser UserEntity currentUser,
             @Parameter(description = "Maximum number of profiles to return", example = "10")
             @RequestParam(defaultValue = "10") int limit) {
-        UUID currentUserId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
-
-        return ResponseEntity.ok(profileService.getDiscoveryFeed(currentUserId, limit));
+        return ResponseEntity.ok(profileService.getDiscoveryFeed(currentUser.getId(), limit));
     }
 
     @Operation(
