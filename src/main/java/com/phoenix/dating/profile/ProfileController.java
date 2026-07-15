@@ -1,5 +1,6 @@
 package com.phoenix.dating.profile;
 
+import com.phoenix.dating.profile.dto.OnboardingPreferencesRequest;
 import com.phoenix.dating.profile.dto.ProfileResponse;
 import com.phoenix.dating.security.CurrentUser;
 import com.phoenix.dating.user.UserEntity;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -61,5 +63,19 @@ public class ProfileController {
             @Parameter(description = "User identifier (UUID)", example = "550e8400-e29b-41d4-a716-446655440001")
             @PathVariable UUID userId) {
         return profileService.getById(userId);
+    }
+
+    @Operation(
+            summary = "Onboard a new user"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Preferences saved"),
+            @ApiResponse(responseCode = "400", description = "Error occurred during saving")
+    })
+    @PostMapping("/onboard")
+    public void onboardProfile(
+            @CurrentUser UserEntity currentUser,
+            @Valid @RequestBody OnboardingPreferencesRequest request) {
+        // TODO
     }
 }
