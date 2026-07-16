@@ -1,6 +1,6 @@
 package com.phoenix.dating.security;
 
-import com.phoenix.dating.user.UserEntity;
+import com.phoenix.dating.repository.user.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;

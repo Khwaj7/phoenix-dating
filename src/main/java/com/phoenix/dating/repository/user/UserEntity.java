@@ -1,4 +1,4 @@
-package com.phoenix.dating.user;
+package com.phoenix.dating.repository.user;
 
 import com.phoenix.dating.profile.model.Gender;
 import jakarta.persistence.*;

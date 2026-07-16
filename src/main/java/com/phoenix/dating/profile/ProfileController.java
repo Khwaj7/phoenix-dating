@@ -2,8 +2,8 @@ package com.phoenix.dating.profile;
 
 import com.phoenix.dating.profile.dto.OnboardingPreferencesRequest;
 import com.phoenix.dating.profile.dto.ProfileResponse;
+import com.phoenix.dating.repository.user.UserEntity;
 import com.phoenix.dating.security.CurrentUser;
-import com.phoenix.dating.user.UserEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,23 +60,24 @@ public class ProfileController {
             @ApiResponse(responseCode = "404", description = "No profile for this identifier", content = @Content)
     })
     @GetMapping("/{userId}")
-    public ProfileResponse getProfileById(
+    public ResponseEntity<ProfileResponse> getProfileById(
             @Parameter(description = "User identifier (UUID)", example = "550e8400-e29b-41d4-a716-446655440001")
             @PathVariable UUID userId) {
-        return profileService.getById(userId);
+        return ResponseEntity.ok(profileService.getById(userId));
     }
 
     @Operation(
             summary = "Onboard a new user"
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Preferences saved"),
-            @ApiResponse(responseCode = "400", description = "Error occurred during saving")
+            @ApiResponse(responseCode = "204", description = "Preferences saved"),
+            @ApiResponse(responseCode = "400", description = "Invalid onboarding preferences")
     })
     @PostMapping("/onboard")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void onboardProfile(
             @CurrentUser UserEntity currentUser,
             @Valid @RequestBody OnboardingPreferencesRequest request) {
-        // TODO
+        profileService.onboardUser(currentUser, request);
     }
 }

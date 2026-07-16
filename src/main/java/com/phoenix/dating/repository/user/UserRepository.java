@@ -1,4 +1,4 @@
-package com.phoenix.dating.user;
+package com.phoenix.dating.repository.user;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
